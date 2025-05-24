@@ -44,51 +44,53 @@ std::vector<karta> karty = {
     {12, "♥️ Q ", 0, true, false},
     {13, "♥️ K ", 0, true, false},
     // karo
-    {1, "♦️A  ", 1, true, false},
-    {2, "♦️2  ", 1, true, false},
-    {3, "♦️3  ", 1, true, false},
-    {4, "♦️4  ", 1, true, false},
-    {5, "♦️5  ", 1, true, false},
-    {6, "♦️6  ", 1, true, false},
-    {7, "♦️7  ", 1, true, false},
-    {8, "♦️8  ", 1, true, false},
-    {9, "♦️9  ", 1, true, false},
-    {10, "♦️10 ", 1, true, false},
-    {11, "♦️J  ", 1, true, false},
-    {12, "♦️Q  ", 1, true, false},
-    {13, "♦️K  ", 1, true, false},
+    {1, "♦️ A ", 1, true, false},
+    {2, "♦️ 2 ", 1, true, false},
+    {3, "♦️ 3 ", 1, true, false},
+    {4, "♦️ 4 ", 1, true, false},
+    {5, "♦️ 5 ", 1, true, false},
+    {6, "♦️ 6 ", 1, true, false},
+    {7, "♦️ 7 ", 1, true, false},
+    {8, "♦️ 8 ", 1, true, false},
+    {9, "♦️ 9 ", 1, true, false},
+    {10, "♦️ 10", 1, true, false},
+    {11, "♦️ J ", 1, true, false},
+    {12, "♦️ Q ", 1, true, false},
+    {13, "♦️ K ", 1, true, false},
     // pik
-    {1, "♠️A  ", 2, false, false},
-    {2, "♠️2  ", 2, false, false},
-    {3, "♠️3  ", 2, false, false},
-    {4, "♠️4  ", 2, false, false},
-    {5, "♠️5  ", 2, false, false},
-    {6, "♠️6  ", 2, false, false},
-    {7, "♠️7  ", 2, false, false},
-    {8, "♠️8  ", 2, false, false},
-    {9, "♠️9  ", 2, false, false},
-    {10, "♠️10 ", 2, false, false},
-    {11, "♠️J  ", 2, false, false},
-    {12, "♠️Q  ", 2, false, false},
-    {13, "♠️K  ", 2, false, false},
+    {1, "♠️ A ", 2, false, false},
+    {2, "♠️ 2 ", 2, false, false},
+    {3, "♠️ 3 ", 2, false, false},
+    {4, "♠️ 4 ", 2, false, false},
+    {5, "♠️ 5 ", 2, false, false},
+    {6, "♠️ 6 ", 2, false, false},
+    {7, "♠️ 7 ", 2, false, false},
+    {8, "♠️ 8 ", 2, false, false},
+    {9, "♠️ 9 ", 2, false, false},
+    {10, "♠️ 10", 2, false, false},
+    {11, "♠️ J ", 2, false, false},
+    {12, "♠️ Q ", 2, false, false},
+    {13, "♠️ K ", 2, false, false},
     // trefl
-    {1, "♣️A  ", 3, false, false},
-    {2, "♣️2  ", 3, false, false},
-    {3, "♣️3  ", 3, false, false},
-    {4, "♣️4  ", 3, false, false},
-    {5, "♣️5  ", 3, false, false},
-    {6, "♣️6  ", 3, false, false},
-    {7, "♣️7  ", 3, false, false},
-    {8, "♣️8  ", 3, false, false},
-    {9, "♣️9  ", 3, false, false},
-    {10, "♣️10 ", 3, false, false},
-    {11, "♣️J ", 3, false, false},
-    {12, "♣️Q  ", 3, false, false},
-    {13, "♣️K  ", 3, false, false}};
+    {1, "♣️ A ", 3, false, false},
+    {2, "♣️ 2 ", 3, false, false},
+    {3, "♣️ 3 ", 3, false, false},
+    {4, "♣️ 4 ", 3, false, false},
+    {5, "♣️ 5 ", 3, false, false},
+    {6, "♣️ 6 ", 3, false, false},
+    {7, "♣️ 7 ", 3, false, false},
+    {8, "♣️ 8 ", 3, false, false},
+    {9, "♣️ 9 ", 3, false, false},
+    {10, "♣️ 10", 3, false, false},
+    {11, "♣️ J ", 3, false, false},
+    {12, "♣️ Q ", 3, false, false},
+    {13, "♣️ K ", 3, false, false}};
 
 std::vector<karta> kolumny[8];
 std::vector<karta> stos_dobierania;
 std::vector<int> stos_odkladania = {0, 0, 0, 0};
+
+std::vector<std::string> symbole_kart = {" ", "A", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
 
 void przygotuj_gre() {
   // Przygotowanie gry
@@ -113,29 +115,42 @@ void przygotuj_gre() {
   }
 }
 
-void wyswietl_plansze() {
-  std::cout << std::endl << "------------------\n";
-  for (int i = 0; i < 7; i++) {
-    std::cout << i + 1 << ". ";
-    for (auto j : kolumny[i]) {
-      if (j.czy_odkryta) {
-        std::cout << j.symbol;
+void wyswietl_plansze() { 
+  std::cout << "-------------------------STÓŁ-------------------------\n";
+  std::cout << "Stos Odkladania\n";
+  std::cout << "♥️ " << symbole_kart[stos_odkladania[0]] << ' ' << "♦️ " << symbole_kart[stos_odkladania[1]]
+            << ' ' << "♠️ " << symbole_kart[stos_odkladania[2]] << ' ' << "♣️ "
+            << symbole_kart[stos_odkladania[3]] << '\n';
+
+
+  int max_dlugosc_kolumny = 0;
+  for (auto i : kolumny) {
+    max_dlugosc_kolumny = std::max(max_dlugosc_kolumny, int(i.size()));
+  }
+  std::cout << "Plansza\n";
+  std::cout << " 1.   2.   3.   4.   5.   6.   7.  Stos Dobierania(8.)\n";
+  for (int i = 0; i < max_dlugosc_kolumny; i++) {
+    for (int j = 0; j < 8; j++) {
+      if (kolumny[j].size() > i) {
+        if (kolumny[j][i].czy_odkryta) {
+          std::cout << kolumny[j][i].symbol;
+        } else {
+          std::cout << " 🂠  ";
+        }
+        std::cout << " ";
       } else {
-        std::cout << "? ";
+        std::cout << "     ";
+      }
+      if (j == 6) {
+        std::cout << "         ";
       }
     }
     std::cout << '\n';
   }
-  std::cout << "Stos Odkladania\n";
-  std::cout << "♥️ " << stos_odkladania[0] << ' ' << "♦️" << stos_odkladania[1]
-            << ' ' << "♠️" << stos_odkladania[2] << ' ' << "♣️"
-            << stos_odkladania[3] << '\n';
 
-  std::cout << "Stos dobierania\n8.";
-  for (auto i : kolumny[7]) {
-    std::cout << i.symbol << ' ';
-  }
-  std::cout << '\n';
+  std::cout << "------------------------------------------------------\n";
+
+
 }
 
 void pomoc() {
@@ -221,7 +236,7 @@ void dobierz() {
 
 void odloz_karte() {
   int kolumna;
-  std::cout << "\n Wpisz kolumnę z której chcesz odłożyć kartę: ";
+  std::cout << "\nWpisz kolumnę z której chcesz odłożyć kartę: ";
   std::cin >> kolumna;
   kolumna--;
   if (std::cin.fail() || kolumna < 0 || kolumna > 7) {
