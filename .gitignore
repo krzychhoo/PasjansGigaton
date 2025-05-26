@@ -36,3 +36,5 @@
 
 # Cache
 /.cache*/
+
+/.idea*/

@@ -13,7 +13,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+find_package(nowide CONFIG REQUIRED)
+
 
 # Add the executable
 
-add_executable(PasjansGigaton src/main.cpp)
+add_executable(PasjansGigaton src/main.cpp )
+target_link_libraries(PasjansGigaton PRIVATE nowide::nowide)

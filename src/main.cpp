@@ -5,6 +5,7 @@
 #include <random>
 #include <string>
 #include <vector>
+#include <nowide/iostream.hpp>
 
 struct karta {
   /*
@@ -131,7 +132,7 @@ void przygotuj_gre() {
 void wyswietl_plansze() {
   std::cout << "-------------------------STÓŁ-------------------------\n";
   std::cout << "Stos Odkladania\n";
-  std::cout << "♥️ " << symbole_kart[stos_odkladania[0]] << ' ' << "♦️ "
+  nowide::cout << "♥️ " << symbole_kart[stos_odkladania[0]] << ' ' << "♦️ "
             << symbole_kart[stos_odkladania[1]] << ' ' << "♠️ "
             << symbole_kart[stos_odkladania[2]] << ' ' << "♣️ "
             << symbole_kart[stos_odkladania[3]] << '\n';
@@ -313,7 +314,6 @@ void wykonaj_polecenie() {
     break;
   case 'q':
     exit(1);
-    break;
   default:
     std::cout << "Błędne polecenie, użyj komendy 'i' w celu przeczytania "
                  "instrukcji\n";

@@ -1,0 +1,15 @@
+{
+  "name" : "pasjansgigaton",
+  "version-string" : "1.0.0",
+  "builtin-baseline" : "8f54ef5453e7e76ff01e15988bf243e7247c5eb5",
+  "dependencies" : [ {
+    "name" : "nowide",
+    "version>=" : "11.3.0"
+  }, {
+    "name" : "vcpkg-cmake-config",
+    "version>=" : "2024-05-23"
+  }, {
+    "name" : "vcpkg-cmake",
+    "version>=" : "2024-04-23"
+  } ]
+}
