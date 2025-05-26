@@ -90,7 +90,10 @@ std::vector<karta> kolumny[8];
 std::vector<karta> stos_dobierania;
 std::vector<int> stos_odkladania = {0, 0, 0, 0};
 
-std::vector<std::string> symbole_kart = {" ", "A", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+std::vector<std::string> symbole_kart = {
+    " ", "A", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+
+bool poziom_trudny = false;
 
 void przygotuj_gre() {
   // Przygotowanie gry
@@ -113,15 +116,25 @@ void przygotuj_gre() {
   for (int i = 28; i < 52; i++) {
     stos_dobierania.push_back(karty[i]);
   }
+  std::cout << "Wpisz 't', jeżeli chcesz włączyć tryb trudny: ";
+  char wybor_trybu;
+  std::cin >> wybor_trybu;
+  if (std::cin.fail()) {
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    return;
+  } else if (wybor_trybu == 't') {
+    poziom_trudny = true;
+  }
 }
 
-void wyswietl_plansze() { 
+void wyswietl_plansze() {
   std::cout << "-------------------------STÓŁ-------------------------\n";
   std::cout << "Stos Odkladania\n";
-  std::cout << "♥️ " << symbole_kart[stos_odkladania[0]] << ' ' << "♦️ " << symbole_kart[stos_odkladania[1]]
-            << ' ' << "♠️ " << symbole_kart[stos_odkladania[2]] << ' ' << "♣️ "
+  std::cout << "♥️ " << symbole_kart[stos_odkladania[0]] << ' ' << "♦️ "
+            << symbole_kart[stos_odkladania[1]] << ' ' << "♠️ "
+            << symbole_kart[stos_odkladania[2]] << ' ' << "♣️ "
             << symbole_kart[stos_odkladania[3]] << '\n';
-
 
   int max_dlugosc_kolumny = 0;
   for (auto i : kolumny) {
@@ -149,8 +162,6 @@ void wyswietl_plansze() {
   }
 
   std::cout << "------------------------------------------------------\n";
-
-
 }
 
 void pomoc() {
@@ -158,7 +169,9 @@ void pomoc() {
   std::cout << "[i]nstrukcja, lista dostępnych poleceń" << std::endl;
   std::cout << "[p]rzesuń, używane do przesuwania kart na planszy" << std::endl;
   std::cout << "[d]obierz, dobieranie karty ze stosu" << std::endl;
-  std::cout << "[o]dłuż, odłuż kartę z jednej z kolumn bądź stosu na stos odkładania" << std::endl;
+  std::cout
+      << "[o]dłuż, odłuż kartę z jednej z kolumn bądź stosu na stos odkładania"
+      << std::endl;
   char t;
   do {
     std::cout << "Wpisz 't', jeśli chcesz wyjść z instrukcji: ";
@@ -221,15 +234,20 @@ void przesun() {
 }
 
 void dobierz() {
-  if (!stos_dobierania.empty()) {
-    kolumny[7].push_back(stos_dobierania.back());
-    kolumny[7].back().czy_odkryta = true;
-    stos_dobierania.pop_back();
-  } else {
-    for (auto i : kolumny[7]) {
-      stos_dobierania.insert(stos_dobierania.begin(), i);
-      stos_dobierania.front().czy_odkryta = false;
-      kolumny[7].pop_back();
+  int liczba_dobieranych_kart = 1;
+  if (poziom_trudny)
+    liczba_dobieranych_kart = 3;
+  for (int i = 0; i < liczba_dobieranych_kart; i++) {
+    if (!stos_dobierania.empty()) {
+      kolumny[7].push_back(stos_dobierania.back());
+      kolumny[7].back().czy_odkryta = true;
+      stos_dobierania.pop_back();
+    } else {
+      for (auto i : kolumny[7]) {
+        stos_dobierania.insert(stos_dobierania.begin(), i);
+        stos_dobierania.front().czy_odkryta = false;
+        kolumny[7].pop_back();
+      }
     }
   }
 }
@@ -256,8 +274,23 @@ void odloz_karte() {
 void sprawdz_warunek_gry() {
   if (stos_odkladania[0] == 13 and stos_odkladania[1] == 13 and
       stos_odkladania[2] == 13 and stos_odkladania[3] == 13) {
-    std::cout << "\n Gratulacje, wygrałeś.\n";
+    std::cout << "\nGratulacje, wygrałeś.\n";
     exit(1);
+  }
+  bool ulozone_karty = true;
+  for (auto kolumna : kolumny) {
+     for (auto karta : kolumna) {
+       if (!karta.czy_odkryta) {
+        ulozone_karty = false;
+        return;
+      }
+     }   
+  }
+  if (!stos_dobierania.empty()) {
+    ulozone_karty = false;
+  }
+  if (ulozone_karty) {
+    std::cout << "\nGratulacje, wygrałeś.\n";
   }
 }
 
