@@ -31,19 +31,19 @@ struct karta {
 };
 std::vector<karta> karty = {
     // kier
-    {1, "♥️ A ", 0, true, false},
-    {2, "♥️ 2 ", 0, true, false},
-    {3, "♥️ 3 ", 0, true, false},
-    {4, "♥️ 4 ", 0, true, false},
-    {5, "♥️ 5 ", 0, true, false},
-    {6, "♥️ 6 ", 0, true, false},
-    {7, "♥️ 7 ", 0, true, false},
-    {8, "♥️ 8 ", 0, true, false},
-    {9, "♥️ 9 ", 0, true, false},
-    {10, "♥️ 10", 0, true, false},
-    {11, "♥️ J ", 0, true, false},
-    {12, "♥️ Q ", 0, true, false},
-    {13, "♥️ K ", 0, true, false},
+    {1, "❤️ A ", 0, true, false},
+    {2, "❤️ 2 ", 0, true, false},
+    {3, "❤️ 3 ", 0, true, false},
+    {4, "❤️ 4 ", 0, true, false},
+    {5, "❤️ 5 ", 0, true, false},
+    {6, "❤️ 6 ", 0, true, false},
+    {7, "❤️ 7 ", 0, true, false},
+    {8, "❤️ 8 ", 0, true, false},
+    {9, "❤️ 9 ", 0, true, false},
+    {10, "❤️ 10", 0, true, false},
+    {11, "❤️ J ", 0, true, false},
+    {12, "❤️ Q ", 0, true, false},
+    {13, "❤️ K ", 0, true, false},
     // karo
     {1, "♦️ A ", 1, true, false},
     {2, "♦️ 2 ", 1, true, false},
@@ -117,12 +117,12 @@ void przygotuj_gre() {
   for (int i = 28; i < 52; i++) {
     stos_dobierania.push_back(karty[i]);
   }
-  std::cout << "Wpisz 't', jeżeli chcesz włączyć tryb trudny: ";
+  nowide::cout << "Wpisz 't', jeżeli chcesz włączyć tryb trudny: ";
   char wybor_trybu;
-  std::cin >> wybor_trybu;
-  if (std::cin.fail()) {
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+  nowide::cin >> wybor_trybu;
+  if (nowide::cin.fail()) {
+    nowide::cin.clear();
+    nowide::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     return;
   } else if (wybor_trybu == 't') {
     poziom_trudny = true;
@@ -130,9 +130,9 @@ void przygotuj_gre() {
 }
 
 void wyswietl_plansze() {
-  std::cout << "-------------------------STÓŁ-------------------------\n";
-  std::cout << "Stos Odkladania\n";
-  nowide::cout << "♥️ " << symbole_kart[stos_odkladania[0]] << ' ' << "♦️ "
+  nowide::cout << "-------------------------STÓŁ-------------------------\n";
+  nowide::cout << "Stos Odkladania\n";
+  nowide::cout << "❤️" << symbole_kart[stos_odkladania[0]] << ' ' << "♦️ "
             << symbole_kart[stos_odkladania[1]] << ' ' << "♠️ "
             << symbole_kart[stos_odkladania[2]] << ' ' << "♣️ "
             << symbole_kart[stos_odkladania[3]] << '\n';
@@ -141,42 +141,42 @@ void wyswietl_plansze() {
   for (auto i : kolumny) {
     max_dlugosc_kolumny = std::max(max_dlugosc_kolumny, int(i.size()));
   }
-  std::cout << "Plansza\n";
-  std::cout << " 1.   2.   3.   4.   5.   6.   7.  Stos Dobierania(8.)\n";
+  nowide::cout << "Plansza\n";
+  nowide::cout << " 1.   2.   3.   4.   5.   6.   7.  Stos Dobierania(8.)\n";
   for (int i = 0; i < max_dlugosc_kolumny; i++) {
     for (int j = 0; j < 8; j++) {
       if (kolumny[j].size() > i) {
         if (kolumny[j][i].czy_odkryta) {
-          std::cout << kolumny[j][i].symbol;
+          nowide::cout << kolumny[j][i].symbol;
         } else {
-          std::cout << " 🂠  ";
+          nowide::cout << " 🂠  ";
         }
-        std::cout << " ";
+        nowide::cout << " ";
       } else {
-        std::cout << "     ";
+        nowide::cout << "     ";
       }
       if (j == 6) {
-        std::cout << "         ";
+        nowide::cout << "         ";
       }
     }
-    std::cout << '\n';
+    nowide::cout << '\n';
   }
 
-  std::cout << "------------------------------------------------------\n";
+  nowide::cout << "------------------------------------------------------\n";
 }
 
 void pomoc() {
-  std::cout << std::endl << "Dostępne polecenia:" << std::endl;
-  std::cout << "[i]nstrukcja, lista dostępnych poleceń" << std::endl;
-  std::cout << "[p]rzesuń, używane do przesuwania kart na planszy" << std::endl;
-  std::cout << "[d]obierz, dobieranie karty ze stosu" << std::endl;
-  std::cout
+  nowide::cout << std::endl << "Dostępne polecenia:" << std::endl;
+  nowide::cout << "[i]nstrukcja, lista dostępnych poleceń" << std::endl;
+  nowide::cout << "[p]rzesuń, używane do przesuwania kart na planszy" << std::endl;
+  nowide::cout << "[d]obierz, dobieranie karty ze stosu" << std::endl;
+  nowide::cout
       << "[o]dłuż, odłuż kartę z jednej z kolumn bądź stosu na stos odkładania"
       << std::endl;
   char t;
   do {
-    std::cout << "Wpisz 't', jeśli chcesz wyjść z instrukcji: ";
-    std::cin >> t;
+    nowide::cout << "Wpisz 't', jeśli chcesz wyjść z instrukcji: ";
+    nowide::cin >> t;
   } while (t != 't');
 }
 
@@ -185,29 +185,29 @@ void przesun() {
   int kolumna_docelowa;
   int liczba_kart = 1;
   // 1-7 zrozumiałe, 8 - stos dobierania
-  std::cout << "Wybierz kolumnę początkową: ";
-  std::cin >> kolumna_poczotkowa;
+  nowide::cout << "Wybierz kolumnę początkową: ";
+  nowide::cin >> kolumna_poczotkowa;
   kolumna_poczotkowa--;
-  if (std::cin.fail() || kolumna_poczotkowa < 0 || kolumna_poczotkowa > 7) {
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+  if (nowide::cin.fail() || kolumna_poczotkowa < 0 || kolumna_poczotkowa > 7) {
+    nowide::cin.clear();
+    nowide::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     return;
   }
-  std::cout << "Wybierz kolumnę docelową: ";
-  std::cin >> kolumna_docelowa;
+  nowide::cout << "Wybierz kolumnę docelową: ";
+  nowide::cin >> kolumna_docelowa;
   kolumna_docelowa--;
-  if (std::cin.fail() || kolumna_docelowa < 0 || kolumna_docelowa > 6 ||
+  if (nowide::cin.fail() || kolumna_docelowa < 0 || kolumna_docelowa > 6 ||
       kolumna_poczotkowa == kolumna_docelowa) {
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    nowide::cin.clear();
+    nowide::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     return;
   }
   if (kolumna_poczotkowa != 7) {
-    std::cout << "Wybierz liczbę kart: ";
-    std::cin >> liczba_kart;
-    if (std::cin.fail()) {
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    nowide::cout << "Wybierz liczbę kart: ";
+    nowide::cin >> liczba_kart;
+    if (nowide::cin.fail()) {
+      nowide::cin.clear();
+      nowide::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       return;
     }
   }
@@ -255,12 +255,12 @@ void dobierz() {
 
 void odloz_karte() {
   int kolumna;
-  std::cout << "\nWpisz kolumnę z której chcesz odłożyć kartę: ";
-  std::cin >> kolumna;
+  nowide::cout << "\nWpisz kolumnę z której chcesz odłożyć kartę: ";
+  nowide::cin >> kolumna;
   kolumna--;
-  if (std::cin.fail() || kolumna < 0 || kolumna > 7) {
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+  if (nowide::cin.fail() || kolumna < 0 || kolumna > 7) {
+    nowide::cin.clear();
+    nowide::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     return;
   }
   if (kolumny[kolumna].back().wartosc - 1 ==
@@ -275,7 +275,7 @@ void odloz_karte() {
 void sprawdz_warunek_gry() {
   if (stos_odkladania[0] == 13 and stos_odkladania[1] == 13 and
       stos_odkladania[2] == 13 and stos_odkladania[3] == 13) {
-    std::cout << "\nGratulacje, wygrałeś.\n";
+    nowide::cout << "\nGratulacje, wygrałeś.\n";
     exit(1);
   }
   bool ulozone_karty = true;
@@ -291,14 +291,14 @@ void sprawdz_warunek_gry() {
     ulozone_karty = false;
   }
   if (ulozone_karty) {
-    std::cout << "\nGratulacje, wygrałeś.\n";
+    nowide::cout << "\nGratulacje, wygrałeś.\n";
   }
 }
 
 void wykonaj_polecenie() {
-  std::cout << "Wpisz polecenie: ";
+  nowide::cout << "Wpisz polecenie: ";
   char polecenie;
-  std::cin >> polecenie;
+  nowide::cin >> polecenie;
   switch (polecenie) {
   case 'i':
     pomoc();
@@ -315,7 +315,7 @@ void wykonaj_polecenie() {
   case 'q':
     exit(1);
   default:
-    std::cout << "Błędne polecenie, użyj komendy 'i' w celu przeczytania "
+    nowide::cout << "Błędne polecenie, użyj komendy 'i' w celu przeczytania "
                  "instrukcji\n";
     wykonaj_polecenie();
     break;
@@ -329,19 +329,19 @@ int main(int argc, char *argv[]) {
     wyswietl_plansze();
     wykonaj_polecenie();
     sprawdz_warunek_gry();
-    /*std::cout << "\n" << wejscie << "\n";*/
+    /*nowide::cout << "\n" << wejscie << "\n";*/
   } while (true);
 
   /*for (auto j : kolumny) {*/
   /*  for (auto i : j) {*/
-  /*    std::cout << i.wartosc << ' ' << i.symbol << ' ' << i.kolor << ' '*/
+  /*    nowide::cout << i.wartosc << ' ' << i.symbol << ' ' << i.kolor << ' '*/
   /*              << i.barwa << '\n';*/
   /*  }*/
-  /*  std::cout << "NOWA KOLUMNA\n";*/
+  /*  nowide::cout << "NOWA KOLUMNA\n";*/
   /*}*/
-  /*std::cout << "STOS DOBIERANIA\n";*/
+  /*nowide::cout << "STOS DOBIERANIA\n";*/
   /*for (auto i : stos_dobierania) {*/
-  /*  std::cout << i.wartosc << ' ' << i.symbol << ' ' << i.kolor << ' '*/
+  /*  nowide::cout << i.wartosc << ' ' << i.symbol << ' ' << i.kolor << ' '*/
   /*            << i.barwa << '\n';*/
   /*}*/
   return 0;
