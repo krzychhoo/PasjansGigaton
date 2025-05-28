@@ -1,11 +1,11 @@
 #include <algorithm>
 #include <cctype>
 #include <cstdlib>
+#include <nowide/fstream.hpp>
+#include <nowide/iostream.hpp>
 #include <random>
 #include <string>
 #include <vector>
-#include <nowide/iostream.hpp>
-#include <nowide/fstream.hpp>
 
 struct karta {
   /*
@@ -89,23 +89,35 @@ std::vector<karta> karty = {
     {13, "♣️ K ", 3, false, false}};
 
 // Definicje najważniejszych zmiennych globalnych wykorzystywanych przez grę
+
+// Struct przechowujący zmienne dotyczące stanu stołu
 struct plansza {
   std::vector<karta> kolumny[8];
   std::vector<karta> stos_dobierania;
   std::vector<int> stos_odkladania = {0, 0, 0, 0};
   int liczba_ruchow = 0;
 };
+
+// Zmienna stol przechowuje obecny stan stołu
 plansza stol;
+
+// Zmienna używana do cofania ruchów
 std::vector<plansza> historia_ruchow;
+
 // Zmienna ograniczająca cofanie do 3 ruchów wstecz od maksymalnego ruchu)
 int max_liczba_ruchow = 0;
 
-
-std::vector<std::string> symbole_kart = {
-    " ", "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+// Pomocnicza zmienna do wypisywania
+std::vector<std::string> symbole_kart = {" ", "A", "2", "3",  "4", "5", "6",
+                                         "7", "8", "9", "10", "J", "Q", "K"};
+// Poziom trudności
 bool poziom_trudny = false;
+
+// Ranking
 std::vector<int> wyniki;
 
+// Funkcja odczytuje ranking z pliku ranking.txt, w przypadku jeżeli plik nie istnieje, tworzy go.
+// Wypisuje 10 najlepszych wyników w rankingu
 void wyswietl_ranking() {
   nowide::ifstream ranking;
   ranking.open("ranking.txt");
@@ -116,7 +128,6 @@ void wyswietl_ranking() {
     ranking.open("ranking.txt");
   }
 
-
   int wynik;
   wyniki.clear();
   while (ranking >> wynik) {
@@ -125,11 +136,12 @@ void wyswietl_ranking() {
   std::sort(wyniki.begin(), wyniki.end());
   nowide::cout << "Obecny ranking 10. najlepszych wyników\n";
   for (int i = 0; i < std::min(10, int(wyniki.size())); i++) {
-    nowide::cout << i+1 << ". " << wyniki[i] << " ruchów\n";
+    nowide::cout << i + 1 << ". " << wyniki[i] << " ruchów\n";
   }
   ranking.close();
 }
 
+// Funkcja służąca do zapisania nowego stanu rankingu w pliku ranking.txt po skończonej grze.
 void zaktualizuj_ranking() {
   wyniki.push_back(stol.liczba_ruchow);
   nowide::ofstream ranking_wyjscie;
@@ -141,21 +153,29 @@ void zaktualizuj_ranking() {
   wyswietl_ranking();
 }
 
+// Prosta funkcja podliczająca liczbę ruchów, zapisuje również historię stanu planszy
+// Limituje ona liczbę zapisanych ruchów do 10 aby zapobiec zaśmiecaniu pamięci.
 void wykonaj_ruch() {
   stol.liczba_ruchow++;
-  if (max_liczba_ruchow <= stol.liczba_ruchow) max_liczba_ruchow = stol.liczba_ruchow;
+  if (max_liczba_ruchow <= stol.liczba_ruchow)
+    max_liczba_ruchow = stol.liczba_ruchow;
   historia_ruchow.push_back(stol);
+  while (historia_ruchow.size() > 10) {
+    historia_ruchow.erase(historia_ruchow.begin());
+  }
 }
+// Funkcja cofa ruch, możliwe 3 cofnięcia
 void cofnij_ruch() {
-  if (historia_ruchow.size() > 1 && max_liczba_ruchow < stol.liczba_ruchow + 3) {
+  if (historia_ruchow.size() > 1 &&
+      max_liczba_ruchow < stol.liczba_ruchow + 3) {
     stol = historia_ruchow[historia_ruchow.size() - 2];
     historia_ruchow.pop_back();
   } else {
     nowide::cout << "Brak możliwości cofnięcia ruchu\n";
   }
-
 }
 
+// Funkcja, która przygotowywuje grę po uruchomieniu, bądź rozpoczęciu nowej gry
 void przygotuj_gre() {
   wyswietl_ranking();
   // Przygotowanie gry
@@ -164,12 +184,12 @@ void przygotuj_gre() {
   auto rng = std::default_random_engine{rd()};
   std::shuffle(karty.begin(), karty.end(), rng);
 
-
-  // Ulozenie kart na stosy po uprzednim ich wyczyszczeniu (żeby dało się rozpocząć w trakcie rozgrywki nową grę)
+  // Ulozenie kart na stosy po uprzednim ich wyczyszczeniu (żeby dało się
+  // rozpocząć w trakcie rozgrywki nową grę)
   int licznik = 0;
   for (int i = 1; i <= 7; i++) {
     int obecny_licznik = licznik;
-    stol.kolumny[i-1].clear();
+    stol.kolumny[i - 1].clear();
     for (int j = licznik; j < obecny_licznik + i; j++) {
       stol.kolumny[i - 1].push_back(karty[j]);
       licznik++;
@@ -184,6 +204,7 @@ void przygotuj_gre() {
   for (int i = 0; i < 4; i++) {
     stol.stos_odkladania.push_back(0);
   }
+  // Dalsze czyszczenie zmiennych
   poziom_trudny = false;
   stol.liczba_ruchow = 0;
   max_liczba_ruchow = 0;
@@ -193,7 +214,8 @@ void przygotuj_gre() {
   // Wybór poziomu trudności
   char wybor_trybu;
   do {
-    nowide::cout << "Wpisz 't', jeżeli chcesz włączyć tryb trudny, bądź 'n' dla trybu normalnego: ";
+    nowide::cout << "Wpisz 't', jeżeli chcesz włączyć tryb trudny, bądź 'n' "
+                    "dla trybu normalnego: ";
     nowide::cin >> wybor_trybu;
     if (nowide::cin.fail()) {
       nowide::cin.clear();
@@ -203,10 +225,7 @@ void przygotuj_gre() {
       poziom_trudny = true;
     }
   } while (wybor_trybu != 't' && wybor_trybu != 'n');
-
 }
-
-
 
 // Funkcja wypisująca obecny stan stołu
 void wyswietl_plansze() {
@@ -214,9 +233,9 @@ void wyswietl_plansze() {
   nowide::cout << "Liczba ruchów: " << stol.liczba_ruchow << '\n';
   nowide::cout << "Stos Odkladania\n";
   nowide::cout << "❤️ " << symbole_kart[stol.stos_odkladania[0]] << ' ' << "♦️ "
-            << symbole_kart[stol.stos_odkladania[1]] << ' ' << "♠️ "
-            << symbole_kart[stol.stos_odkladania[2]] << ' ' << "♣️ "
-            << symbole_kart[stol.stos_odkladania[3]] << '\n';
+               << symbole_kart[stol.stos_odkladania[1]] << ' ' << "♠️ "
+               << symbole_kart[stol.stos_odkladania[2]] << ' ' << "♣️ "
+               << symbole_kart[stol.stos_odkladania[3]] << '\n';
 
   int max_dlugosc_kolumny = 0;
   for (auto i : stol.kolumny) {
@@ -247,21 +266,20 @@ void wyswietl_plansze() {
 }
 // Funkcja pomoc, przypominająca użytkownikowi komendy
 void pomoc() {
-  nowide::cout << std::endl << "Dostępne polecenia:" << std::endl;
-  nowide::cout << "[i]nstrukcja, lista dostępnych poleceń" << std::endl;
-  nowide::cout << "[p]rzesuń, używane do przesuwania kart na planszy" << std::endl;
-  nowide::cout << "[d]obierz, dobieranie karty ze stosu" << std::endl;
-  nowide::cout
-      << "[o]dłuż, odłuż kartę z jednej z kolumn bądź stosu na stos odkładania"
-      << std::endl;
-  nowide::cout << "[n]owa gra";
-  nowide::cout << "[c]ofnij ruch";
+  nowide::cout << "\nDostępne polecenia:\n";
+  nowide::cout << "[i]nstrukcja, lista dostępnych poleceń\n";
+  nowide::cout << "[p]rzesuń, używane do przesuwania kart na planszy\n";
+  nowide::cout << "[d]obierz, dobieranie karty ze stosu\n";
+  nowide::cout << "[o]dłuż, odłuż kartę z jednej z kolumn bądź stosu na stos odkładania\n";
+  nowide::cout << "[n]owa gra\n";
+  nowide::cout << "[c]ofnij ruch\n";
   char t;
   do {
     nowide::cout << "Wpisz 't', jeśli chcesz wyjść z instrukcji: ";
     nowide::cin >> t;
   } while (t != 't');
 }
+
 // Funkcja przesuwania kart między stosami
 void przesun() {
   int kolumna_poczotkowa;
@@ -287,6 +305,7 @@ void przesun() {
     nowide::cout << "BŁĄD polecenia\n";
     return;
   }
+  // Nie da się ze stosu dobierania przesunąć więcej niż jedną kartę, więc nie ma sensu pytać o liczbę kart
   if (kolumna_poczotkowa != 7) {
     nowide::cout << "Wybierz liczbę kart: ";
     nowide::cin >> liczba_kart;
@@ -297,10 +316,10 @@ void przesun() {
       return;
     }
   }
-  // Faktyczna logika przesuwania kart
+  // Pasjansowa logika przesuwania kart
   if (liczba_kart <= stol.kolumny[kolumna_poczotkowa].size()) {
     int pierwsza_karta = stol.kolumny[kolumna_poczotkowa].size() - liczba_kart;
-    karta& pierwsza_karta2 = stol.kolumny[kolumna_poczotkowa][pierwsza_karta];
+    karta &pierwsza_karta2 = stol.kolumny[kolumna_poczotkowa][pierwsza_karta];
     int ostatnia_karta = stol.kolumny[kolumna_docelowa].size() - 1;
     if ((stol.kolumny[kolumna_poczotkowa][pierwsza_karta].barwa !=
              stol.kolumny[kolumna_docelowa][ostatnia_karta].barwa &&
@@ -312,10 +331,11 @@ void przesun() {
       for (int i = 0; i < liczba_kart; i++) {
         stol.kolumny[kolumna_docelowa].push_back(
             stol.kolumny[kolumna_poczotkowa][pierwsza_karta]);
-        stol.kolumny[kolumna_poczotkowa].erase(stol.kolumny[kolumna_poczotkowa].begin() +
-                                          pierwsza_karta);
+        stol.kolumny[kolumna_poczotkowa].erase(
+            stol.kolumny[kolumna_poczotkowa].begin() + pierwsza_karta);
       }
-      if (kolumna_poczotkowa != 7 && !stol.kolumny[kolumna_poczotkowa].empty()) {
+      if (kolumna_poczotkowa != 7 &&
+          !stol.kolumny[kolumna_poczotkowa].empty()) {
         stol.kolumny[kolumna_poczotkowa].back().czy_odkryta = true;
       }
     } else {
@@ -328,6 +348,7 @@ void przesun() {
   }
   wykonaj_ruch();
 }
+
 // Dobierz kartę na stos dobierania
 void dobierz() {
   int liczba_dobieranych_kart = 1;
@@ -348,6 +369,7 @@ void dobierz() {
   }
   wykonaj_ruch();
 }
+
 // Odłóż kartę na jeden z 4 stosów odkładania
 void odloz_karte() {
   int kolumna;
@@ -373,35 +395,17 @@ void odloz_karte() {
   wykonaj_ruch();
 }
 
-// Sprawdzanie, czy użytkownik wygrał
+// Sprawdzanie, czy użytkownik wygrał, jeżeli tak funkcja wywołuje procedurę zakończenia gry
 void sprawdz_warunek_gry() {
   if (stol.stos_odkladania[0] == 13 and stol.stos_odkladania[1] == 13 and
       stol.stos_odkladania[2] == 13 and stol.stos_odkladania[3] == 13) {
-    nowide::cout << "\nGratulacje, wygrałeś.\n";
+    nowide::cout << "Gratulacje, wygrałeś.\n";
     zaktualizuj_ranking();
     exit(1);
   }
-  /*bool ulozone_karty = true;
-  for (auto kolumna : kolumny) {
-     for (auto karta : kolumna) {
-       if (!karta.czy_odkryta) {
-        ulozone_karty = false;
-        return;
-      }
-     }   
-  }
-  if (!stos_dobierania.empty()) {
-    ulozone_karty = false;
-  }
-  if (ulozone_karty) {
-    nowide::cout << "\nGratulacje, wszystkie karty są ułożone na planszy, wygrałeś.\n";
-  }*/
 }
 
-
-
-
-// Przetwarzanie komend użytkownika
+// Przetwarzanie poleceń użytkownika
 void wykonaj_polecenie() {
   nowide::cout << "Wpisz polecenie: ";
   char polecenie;
@@ -429,7 +433,7 @@ void wykonaj_polecenie() {
     break;
   default:
     nowide::cout << "Błędne polecenie, użyj komendy 'i' w celu przeczytania "
-                 "instrukcji\n";
+                    "instrukcji\n";
     wykonaj_polecenie();
     break;
   }
@@ -437,14 +441,13 @@ void wykonaj_polecenie() {
 
 int main(int argc, char *argv[]) {
   // Rozpoczęcie gry
-  /*przygotuj_gre();
+  przygotuj_gre();
   // Główna pętla gry
   do {
     wyswietl_plansze();
     wykonaj_polecenie();
     sprawdz_warunek_gry();
-  } while (true);*/
-  wyswietl_ranking();
+  } while (true);
 
   return 0;
 }

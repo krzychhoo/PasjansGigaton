@@ -15,9 +15,38 @@ cmake --install build
 ```
 
 ## Uruchomienie programu po kompilacji
+Komendy zakładają korzystanie z powłoki Powershell, w przypadku innej powłoki należy zmienić katalog odpowiadającą komendą. Odpowiedni katalog jest kluczowy dla wyświetlania rankingu.
 ```
-.\bin\PasjansGigaton.exe
+cd bin
+.\PasjansGigaton.exe
 ```
 
 ## Instrukcja obsługi gry
-Całość instrukcji zawarta jest w komendzie 'i' w grze.
+
+### Wstęp
+Gra nie posiada argumentów wywoływanych w konsoli.
+Przy uruchomieniu gra wyświetla Top 10 wyników w rankingu.
+Następnie gracz proszony jest o wybór poziomu trudności, wpisując 'n' dla normalnego albo 't' dla trudnego.
+
+### Opis poleceń
+
+Lista poleceń jest również dostępna w grze pod komendą 'i'
+- [i]nstrukcja, lista dostępnych poleceń
+- [p]rzesuń, używane do przesuwania kart na planszy
+- [d]obierz, dobieranie karty ze stosu
+- [o]dłuż, odłuż kartę z jednej z kolumn bądź stosu na stos odkładania
+- [n]owa gra
+- [c]ofnij ruch
+
+### Koniec gry
+
+Gra kończy się w momencie, kiedy wszystkie karty znalazły się na stosie odkładania.
+Gra wywołuje wtedy komunikat informujący użytkownika o wygranej.
+Wypisany jest wtedy zaktualizowany ranking, a program kończy działanie.
+
+## Dokumentacja techniczna
+Opis kodu (tzn. funkcji, zmiennych itd.) znajduje się w komentarzach w kodzie (src\main.cpp).
+
+### Biblioteki
+- `nowide` biblioteka umożliwiająca łatwe oraz przenośne wypisywanie znaków unicode,
+           implementuje nagłówki z biblioteki standardowej c++ w wersji zgodnej z unicode
