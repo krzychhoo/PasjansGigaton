@@ -9,7 +9,7 @@
 UWAGA! Należy wpisać ścieżkę, gdzie zainstalowano vcpkg **na danym komputerze**.
 Przykładowo: `C:\Users\Uzytkownik\vcpkg\scripts\buildsystems\vcpkg.cmake`
 ```
-cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=sciezka_do_folderu_vcpkg\scripts\buildsystems\vcpkg.cmake
+cmake -B build -S . -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=sciezka_do_folderu_vcpkg\scripts\buildsystems\vcpkg.cmake
 cmake --build build --config Release
 cmake --install build
 ```
@@ -37,6 +37,7 @@ Lista poleceń jest również dostępna w grze pod komendą 'i'
 - [o]dłuż, odłuż kartę z jednej z kolumn bądź stosu na stos odkładania
 - [n]owa gra
 - [c]ofnij ruch
+- [q]uit, wyjdź z gry
 
 ### Koniec gry
 

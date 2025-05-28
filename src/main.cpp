@@ -1,6 +1,4 @@
 #include <algorithm>
-#include <cctype>
-#include <cstdlib>
 #include <nowide/fstream.hpp>
 #include <nowide/iostream.hpp>
 #include <random>
@@ -273,6 +271,7 @@ void pomoc() {
   nowide::cout << "[o]dłuż, odłuż kartę z jednej z kolumn bądź stosu na stos odkładania\n";
   nowide::cout << "[n]owa gra\n";
   nowide::cout << "[c]ofnij ruch\n";
+  nowide::cout << "[q]uit, wyjdź z gry\n";
   char t;
   do {
     nowide::cout << "Wpisz 't', jeśli chcesz wyjść z instrukcji: ";
