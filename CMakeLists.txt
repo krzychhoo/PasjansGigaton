@@ -21,3 +21,4 @@ target_link_libraries(PasjansGigaton PRIVATE nowide::nowide)
 
 # Folder docelowy do instalacji
 install(TARGETS PasjansGigaton DESTINATION ${PROJECT_SOURCE_DIR}/bin)
+install(FILES $<TARGET_RUNTIME_DLLS:PasjansGigaton> DESTINATION ${PROJECT_SOURCE_DIR}/bin)

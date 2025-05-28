@@ -10,7 +10,7 @@ UWAGA! Należy wpisać ścieżkę, gdzie zainstalowano vcpkg **na danym komputer
 Przykładowo: `C:\Users\Uzytkownik\vcpkg\scripts\buildsystems\vcpkg.cmake`
 ```
 cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=sciezka_do_folderu_vcpkg\scripts\buildsystems\vcpkg.cmake
-cmake --build build
+cmake --build build --config Release
 cmake --install build
 ```
 
