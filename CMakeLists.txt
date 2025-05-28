@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.16)
 # Set the project name and version
 
-project(PasjansGigaton VERSION 0.2)
+project(PasjansGigaton VERSION 0.3)
 
 
 # Specify the C++ standard
@@ -20,3 +20,4 @@ find_package(nowide CONFIG REQUIRED)
 
 add_executable(PasjansGigaton src/main.cpp )
 target_link_libraries(PasjansGigaton PRIVATE nowide::nowide)
+install(TARGETS PasjansGigaton DESTINATION ${PROJECT_SOURCE_DIR}/bin)
